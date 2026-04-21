@@ -1,14 +1,16 @@
+/*
+Proje: Netflix Veri Seti Analizi
+Yazar: Deniz BAL
+Açıklama: Netflix veri setinin temizlenmesi, null değerlerin yönetimi ve trend analizleri.
+Tarih: 2026-04-21
+*/
+
 SELECT * FROM netflix_titles
-
-
-
 -- NULL Değerleri bulma işlemi.
 SELECT 'Eksik Ülke' AS Kategory , COUNT(*) AS Sayi FROM netflix_titles WHERE country  IS NULL UNION ALL
 SELECT 'Eksik Yönetmen' , COUNT(*) FROM netflix_titles WHERE director IS NULL UNION ALL
 SELECT 'Eksik rating' , COUNT(*) FROM netflix_titles WHERE rating IS NULL UNION ALL
 SELECT 'Eksik oyuncu', COUNT(*) FROM netflix_titles WHERE cast IS NULL;
-
-
 
 --VIEW ile sanal çalışma ortamı kurulumu. Null değerleri doldurma işlemi.
 CREATE VIEW netflix_temiz AS
@@ -20,9 +22,8 @@ ISNULL(rating,'Unknown rating') AS rating,
 date_added,release_year,duration,listed_in,description
 FROM netflix_titles
 
---Analiz işlemleri.
+--Analiz işlemleri. View ile veriyi bozmadan sanal işlemler yapıldı.
 SELECT * FROM netflix_temiz
-
 
 SELECT şehirler AS 'Ülke adı',COUNT(*) AS 'En çok içerik üreten ülke' FROM netflix_temiz 
 GROUP BY şehirler ORDER BY 'En çok içerik üreten ülke' DESC
@@ -32,21 +33,21 @@ GROUP BY şehirler ORDER BY 'En çok içerik üreten ülke' DESC
 SELECT YEAR(date_added) AS 'Ekleme_yılı' ,COUNT(*) AS 'İçeriklerin_toplamı' FROM netflix_temiz 
 WHERE date_added IS NOT NULL 
 GROUP BY YEAR(date_added) ORDER BY 'Ekleme_yılı' DESC;
--- 2018-2020 Yılları arasında (pandemi döneminde) içerik üretimi diğer yıllara göre daha fazla artmıştır.
+-- 2018-2020 Yılları arasında içerik üretimi diğer yıllara göre daha fazla artmıştır.
 
 
 SELECT TRIM(value) AS 'Tür', COUNT(*) AS 'Sayı' FROM netflix_temiz
 CROSS APPLY STRING_SPLIT(listed_in,',')
 GROUP BY TRIM(value)
 ORDER BY Sayı DESC;
--- Film türleri arasında en çok izlenen Top 5.
+-- Film türleri arasında en çok izlenenler. Bu türler için daha çok bütçe ayırılabilir.
 
 
 SELECT YEAR(date_added) AS 'Yıl', COUNT(*) AS 'Toplam İçerik Sayısı' FROM netflix_temiz
 CROSS APPLY STRING_SPLIT(listed_in,',') WHERE TRIM(value)='International Movies' AND date_added IS NOT NULL
 GROUP BY YEAR(date_added)
 ORDER BY Yıl DESC; 
--- 2017'den 2018 geçişte (pandemi) netflix 'yerel içerik (International Movies)' üretiminde bütçe artırmıştır.
+-- 2017'den 2018 geçişte netflix 'yerel içerik (International Movies)' üretiminde bütçe artırmıştır.
 
 
 SELECT TRIM(value) AS Tur,
@@ -59,7 +60,7 @@ CROSS APPLY STRING_SPLIT(listed_in, ',')
 WHERE duration LIKE '%min%' -- Sadece film olanları alıyoruz
 GROUP BY TRIM(value)
 ORDER BY Ortalama_Dakika DESC;
--- Filmlerin ortalama süreleri.
+-- Filmlerin ortalama süreleri. İzleyici seyrini etkileyen en önemli ünsur.
 
 
 SELECT director,COUNT(show_id) AS 'Toplam İçerik Sayısı',
@@ -84,5 +85,4 @@ CROSS APPLY STRING_SPLIT(listed_in,',') WHERE şehirler IS NOT NULL AND şehirle
 GROUP BY şehirler, TRIM(value)
 HAVING COUNT(*)>50        -- Gürültü olmasın diye sınırlandırdık.
 ORDER BY 'İçerik sayisi' DESC;
-
--- Netflix Global Çalışmaları En çok Hindistan ve US ülkelerine içerik üretmiştir. 
+-- Netflix Global Çalışmaları En çok Hindistan ve USA ülkelerine içerik üretmiştir. 
