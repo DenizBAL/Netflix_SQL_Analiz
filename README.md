@@ -18,19 +18,19 @@ Bu proje, Netflix'in ham veri setinin SQL Server kullanılarak analiz edilmesi v
 ## 📊 Öne Çıkan Bulgular
 
 - Hindistan ve USA ülkeleri içerik üretiminde zirvede yer almaktadır.
-![Ülkeler](assets/Ulkeler.png)
+- ![Ülkeler](assets/Ulkeler.png)
 
 - Uluslararası, drama ve komedi filmleri en çok izlenen içerik türleridir.
-![Türler](assets/Turler.png)
+- ![Türler](assets/Turler.png)
 
 - 2017-2019 yılları arasında Netflix içerik üretimine büyük yatırımlar yapmıştır.
-![Yatırım](assets/Yatirim.png)
+- ![Yatırım](assets/Yatirim.png)
 
 - "Yetişkin / Genç Yetişkin" ve "Aile" yaş grupları en çok içerik üretilen kategorilerdir.
-![Yaş Grupları](assets/yas_gruplari.png)
+- ![Yaş Grupları](assets/yas_gruplari.png)
 
 - Ülke bazlı içerik türleri ve üretim hacmi detaylı olarak analiz edilmiştir.
-![Ülke Analizi](assets/ulke_analizi.png)
+- ![Ülke Analizi](assets/ulke_analizi.png)
 
 ## 📬 İletişim
 Bu proje ile ilgili sorularınız veya önerileriniz için benimle [LinkedIn profilim](https://www.linkedin.com/in/deniz-bal-64838b225) üzerinden iletişime geçebilirsiniz.
